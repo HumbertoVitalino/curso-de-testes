@@ -9,6 +9,7 @@ namespace JornadaMilhasV1.Modelos;
 
 public class OfertaViagem: Valida
 {
+    public const double Desconto_maximo = 0.7;
     private double desconto;
 
     public int Id { get; set; }
@@ -16,11 +17,19 @@ public class OfertaViagem: Valida
     public Periodo Periodo { get; set; }
     public double Preco { get; set; }
     public double Desconto 
-    { get => desconto;
-      set
+    { 
+        get => desconto;
+        set
         {
             desconto = value;
-            Preco -= desconto;
+            if (desconto >= Preco)
+            {
+                Preco *= (1 - Desconto_maximo);
+            } 
+            else
+            {
+                Preco -= desconto;
+            }
         }
     }
 
