@@ -35,4 +35,18 @@ public class RotaTeste
         Assert.Contains("A rota não pode possuir uma origem nula ou vazia.", rota.Erros.Sumario);
         Assert.False(rota.EhValido);
     }
+
+    [Fact]
+    public void TestIfRouteIsValidWithSecondParameterNull()
+    {
+        //arrange
+        Rota rota = new Rota("São Paulo", null);
+
+        //act
+        rota.Validar();
+
+        //assert
+        Assert.Contains("A rota não pode possuir um destino nulo ou vazio.", rota.Erros.Sumario);
+        Assert.False(rota.EhValido);
+    }
 }
