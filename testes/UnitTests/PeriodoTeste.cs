@@ -22,5 +22,17 @@ public class PeriodoTeste
         Assert.True(periodo.EhValido);
     }
 
-    
+    [Fact]
+    public void TestingIfPeriodIsInvalid()
+    {
+        //arrange
+        Periodo periodo = new Periodo(new DateTime(2024, 05, 12), new DateTime(2024, 05, 10));
+
+        //act
+        periodo.Validar();
+
+        //assert
+        Assert.Contains("Erro: Data de ida não pode ser maior que a data de volta.", periodo.Erros.Sumario);
+        Assert.False(periodo.EhValido);
+    }
 }
