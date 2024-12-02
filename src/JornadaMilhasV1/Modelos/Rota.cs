@@ -21,7 +21,7 @@ public class Rota: Valida
 
     }
 
-    protected override void Validar()
+    public override void Validar()
     {
         if ((this.Origem is null) || this.Origem.Equals(string.Empty))
         {

@@ -47,7 +47,7 @@ public class OfertaViagem: Valida
         return $"Origem: {Rota.Origem}, Destino: {Rota.Destino}, Data de Ida: {Periodo.DataInicial.ToShortDateString()}, Data de Volta: {Periodo.DataFinal.ToShortDateString()}, Preço: {Preco:C}";
     }
 
-    protected override void Validar()
+    public override void Validar()
     {
         if (!Periodo.EhValido)
         {
