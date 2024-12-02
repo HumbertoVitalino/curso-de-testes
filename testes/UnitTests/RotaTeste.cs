@@ -21,4 +21,18 @@ public class RotaTeste
         //assert
         Assert.True(rota.EhValido);
     }
+
+    [Fact]
+    public void TestIfRouteIsValidWithFirstParameterNull()
+    {
+        //arrange
+        Rota rota = new Rota(null, "Rio de Janeiro");
+
+        //act
+        rota.Validar();
+
+        //assert
+        Assert.Contains("A rota não pode possuir uma origem nula ou vazia.", rota.Erros.Sumario);
+        Assert.False(rota.EhValido);
+    }
 }
