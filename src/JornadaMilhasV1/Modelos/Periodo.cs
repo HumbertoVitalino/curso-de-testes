@@ -19,7 +19,7 @@ public class Periodo: Valida
         Validar();
     }
 
-    public override void Validar()
+    protected override void Validar()
     {
         if (DataInicial > DataFinal)
         {

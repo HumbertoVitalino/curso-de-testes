@@ -14,6 +14,8 @@ public class Rota: Valida
     public string Origem { get; set; }
     public string Destino { get; set; }
 
+    public ICollection<OfertaViagem> OfertasViagem { get; set; }
+
     public Rota(string origem, string destino)
     {
         Origem = origem;
@@ -21,7 +23,7 @@ public class Rota: Valida
 
     }
 
-    public override void Validar()
+    protected override void Validar()
     {
         if ((this.Origem is null) || this.Origem.Equals(string.Empty))
         {
