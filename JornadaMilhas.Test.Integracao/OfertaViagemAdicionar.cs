@@ -1,5 +1,6 @@
 using AutoBogus;
 using JornadaMilhas.Dados;
+using JornadaMilhas.Test.Integracao.Fixture;
 using JornadaMilhasV1.Modelos;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,20 +8,23 @@ namespace JornadaMilhas.Test.Integracao;
 
 public class OfertaViagemAdicionar
 {
+    private readonly JornadaMilhasContext _context;
+    private readonly OfertaViagemFixture _fixture;
+    public OfertaViagemAdicionar()
+    {
+        var options = new DbContextOptionsBuilder<JornadaMilhasContext>()
+            .UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=JornadaMilhas;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False")
+            .Options;
+
+        _context = new JornadaMilhasContext(options);
+    }
+
     [Fact]
     public void RegistraOfertaNoBanco()
     {
         //arrange
-        Rota rota = new AutoFaker<Rota>();
-        Periodo periodo = new AutoFaker<Periodo>();
-        double preco = 350;
-
-        var options = new DbContextOptionsBuilder<JornadaMilhasContext>()
-            .UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=JornadaMilhas;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False")
-            .Options;
-        var context = new JornadaMilhasContext(options);
-        var dal = new OfertaViagemDAL(context);
-        var oferta = new OfertaViagem(rota, periodo, preco);
+        var oferta = _fixture.CriaUmaOfertaValida();
+        var dal = new OfertaViagemDAL(_context);
 
         //act
         dal.Adicionar(oferta);
@@ -29,5 +33,24 @@ public class OfertaViagemAdicionar
         var ofertaIncluida = dal.RecuperarPorId(oferta.Id);
         Assert.NotNull(ofertaIncluida);
         Assert.Equal(ofertaIncluida.Preco, oferta.Preco, 0.001);
+    }
+
+    [Fact]
+    public void RegistraOfertaNoBancoComDadosCorretos()
+    {
+        //arrange
+        var oferta = _fixture.CriaUmaOfertaValida();
+        var dal = new OfertaViagemDAL(_context);
+
+        //act
+        dal.Adicionar(oferta);
+
+        //assert
+        var ofertaIncluida = dal.RecuperarPorId(oferta.Id);
+        Assert.NotNull(ofertaIncluida);
+        Assert.Equal(ofertaIncluida.Preco, oferta.Preco, 0.001);
+        Assert.Equal(ofertaIncluida.Rota, oferta.Rota);
+        Assert.Equal(ofertaIncluida.Id, oferta.Id);
+        Assert.Equal(ofertaIncluida.Desconto, oferta.Desconto);
     }
 }
