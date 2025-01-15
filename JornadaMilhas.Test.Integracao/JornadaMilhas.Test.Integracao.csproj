@@ -27,8 +27,4 @@
     <ProjectReference Include="..\src\JornadaMilhasV1\JornadaMilhas.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Fixture\" />
-  </ItemGroup>
-
 </Project>

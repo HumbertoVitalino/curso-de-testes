@@ -13,7 +13,7 @@ public class OfertaViagemAdicionar
     public OfertaViagemAdicionar()
     {
         var options = new DbContextOptionsBuilder<JornadaMilhasContext>()
-            .UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=JornadaMilhas;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False")
+            .UseSqlServer("server = localhost; database= JornadaMilhas; trusted_connection= true, trustservercertificate= true")
             .Options;
 
         _context = new JornadaMilhasContext(options);
