@@ -3,20 +3,18 @@ using JornadaMilhas.Dados;
 using JornadaMilhas.Test.Integracao.Fixture;
 using JornadaMilhasV1.Modelos;
 using Microsoft.EntityFrameworkCore;
+using Xunit.Abstractions;
 
 namespace JornadaMilhas.Test.Integracao;
 
-public class OfertaViagemAdicionar
+public class OfertaViagemAdicionar : IClassFixture<ContextoFixture>
 {
     private readonly JornadaMilhasContext _context;
     private readonly OfertaViagemFixture _fixture;
-    public OfertaViagemAdicionar()
+    public OfertaViagemAdicionar(ITestOutputHelper output, ContextoFixture fix)
     {
-        var options = new DbContextOptionsBuilder<JornadaMilhasContext>()
-            .UseSqlServer("server = localhost; database= JornadaMilhas; trusted_connection= true, trustservercertificate= true")
-            .Options;
-
-        _context = new JornadaMilhasContext(options);
+        _context = fix.Context;   
+        output.WriteLine(_context.GetHashCode().ToString());
     }
 
     [Fact]
