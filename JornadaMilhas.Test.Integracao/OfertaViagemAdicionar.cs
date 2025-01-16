@@ -1,19 +1,17 @@
-using AutoBogus;
 using JornadaMilhas.Dados;
 using JornadaMilhas.Test.Integracao.Fixture;
-using JornadaMilhasV1.Modelos;
-using Microsoft.EntityFrameworkCore;
 using Xunit.Abstractions;
 
 namespace JornadaMilhas.Test.Integracao;
 
-public class OfertaViagemAdicionar : IClassFixture<ContextoFixture>
+[Collection(nameof(ContextoCollection))]
+public class OfertaViagemAdicionar
 {
     private readonly JornadaMilhasContext _context;
     private readonly OfertaViagemFixture _fixture;
     public OfertaViagemAdicionar(ITestOutputHelper output, ContextoFixture fix)
     {
-        _context = fix.Context;   
+        _context = fix.Context;
         output.WriteLine(_context.GetHashCode().ToString());
     }
 
