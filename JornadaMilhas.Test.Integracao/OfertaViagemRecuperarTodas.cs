@@ -12,7 +12,6 @@ public class OfertaViagemRecuperarTodas
     {
         _context = fix.Context;
         output.WriteLine(_context.GetHashCode().ToString());
-
     }
 
     [Fact]
