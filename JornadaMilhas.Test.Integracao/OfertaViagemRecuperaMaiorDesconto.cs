@@ -1,59 +1,45 @@
-﻿using Bogus;
+﻿using AutoBogus;
+using Bogus;
 using JornadaMilhas.Dados;
 using JornadaMilhas.Test.Integracao.Fixture;
-using JornadaMilhasV1.Gerenciador;
 using JornadaMilhasV1.Modelos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit.Abstractions;
+
 namespace JornadaMilhas.Test.Integracao;
+
 [Collection(nameof(ContextoCollection))]
 public class OfertaViagemDalRecuperaMaiorDesconto
 {
     private readonly JornadaMilhasContext context;
+    private readonly ContextoFixture fixture;
+
     public OfertaViagemDalRecuperaMaiorDesconto(ContextoFixture fixture)
     {
         context = fixture.Context;
+        this.fixture = fixture;
     }
+
     [Fact]
     // destino = são paulo, desconto = 40, preco = 80
     public void RetornaOfertaEspecificaQuandoDestinoSaoPauloEDesconto40()
     {
         //arrange
-        var fakerPeriodo = new Faker<Periodo>()
-            .CustomInstantiator(f =>
-            {
-                DateTime dataInicio = f.Date.Soon();
-                return new Periodo(dataInicio, dataInicio.AddDays(30));
-            });
-        var rota = new Rota("Curitiba", "São Paulo");
-        var fakerOferta = new Faker<OfertaViagem>()
-            .CustomInstantiator(f => new OfertaViagem(
-                rota,
-                fakerPeriodo.Generate(),
-                100 * f.Random.Int(1, 100))
-            )
-            .RuleFor(o => o.Desconto, f => 40)
-            .RuleFor(o => o.Ativa, f => true);
+        Rota rota = new AutoFaker<Rota>();
+        Periodo periodo = new AutoFaker<Periodo>();
+        fixture.CriaDadosFake();
 
-        var ofertaEscolhida = new OfertaViagem(rota, fakerPeriodo.Generate(), 80)
+        var ofertaEscolhida = new OfertaViagem(rota, periodo, 80)
         {
             Desconto = 40,
             Ativa = true
         };
-        var ofertaInativa = new OfertaViagem(rota, fakerPeriodo.Generate(), 70)
+        var ofertaInativa = new OfertaViagem(rota, periodo, 70)
         {
             Desconto = 40,
             Ativa = false
         };
         var dal = new OfertaViagemDAL(context);
-        var lista = fakerOferta.Generate(200);
-        lista.Add(ofertaEscolhida);
-        lista.Add(ofertaInativa);
-        context.OfertasViagem.AddRange(lista);
+        dal.Adicionar(ofertaEscolhida);
+
         context.SaveChanges();
         Func<OfertaViagem, bool> filtro = o => o.Rota.Destino.Equals("São Paulo");
         var precoEsperado = 40;
