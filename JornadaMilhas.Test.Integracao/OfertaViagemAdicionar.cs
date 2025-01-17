@@ -8,18 +8,20 @@ namespace JornadaMilhas.Test.Integracao;
 public class OfertaViagemAdicionar
 {
     private readonly JornadaMilhasContext _context;
-    private readonly OfertaViagemFixture _fixture;
+    private readonly ContextoFixture fix;
+
     public OfertaViagemAdicionar(ITestOutputHelper output, ContextoFixture fix)
     {
         _context = fix.Context;
         output.WriteLine(_context.GetHashCode().ToString());
+        this.fix = fix;
     }
 
     [Fact]
     public void RegistraOfertaNoBanco()
     {
         //arrange
-        var oferta = _fixture.CriaUmaOfertaValida();
+        var oferta = fix.CriaUmaOfertaValida();
         var dal = new OfertaViagemDAL(_context);
 
         //act
@@ -35,7 +37,7 @@ public class OfertaViagemAdicionar
     public void RegistraOfertaNoBancoComDadosCorretos()
     {
         //arrange
-        var oferta = _fixture.CriaUmaOfertaValida();
+        var oferta = fix.CriaUmaOfertaValida();
         var dal = new OfertaViagemDAL(_context);
 
         //act
